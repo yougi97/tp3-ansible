@@ -1,4 +1,4 @@
-- name: Run front
+- name: Run Frontend
   community.docker.docker_container:
     name: "{{ front_container }}"
     image: "{{ front_image }}"

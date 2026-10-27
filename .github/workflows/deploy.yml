@@ -1,0 +1,42 @@
+
+name: Deploy application
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Ansible
+        run: |
+          python3 -m pip install --user ansible
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Install Docker collection
+        run: |
+          ansible-galaxy collection install community.docker
+
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ulric.martingoulet.takima.school >> ~/.ssh/known_hosts
+
+      - name: Deploy with Ansible
+        run: |
+          ansible-playbook \
+            -i ansible/inventories/setup.yml \
+            ansible/deploy.yml \
+            --private-key ~/.ssh/deploy_key
