@@ -1,0 +1,19 @@
+docker_network_name: app-network
+
+dockerhub_user: martingouletu
+
+# Ces noms doivent correspondre à ceux utilisés dans ton httpd.conf et ton application
+database_container: database
+database_image: "{{ dockerhub_user }}/my-database:1.0"
+database_name: database
+database_user: root
+database_password: pwd
+
+app_container: backend
+app_image: "{{ dockerhub_user }}/my-backend:1.0"
+
+proxy_container: httpd
+proxy_image: "{{ dockerhub_user }}/my-httpd:1.1"
+
+front_container: front
+front_image: "{{ dockerhub_user }}/my-front:1.0"

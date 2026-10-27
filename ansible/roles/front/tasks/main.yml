@@ -1,0 +1,9 @@
+- name: Run front
+  community.docker.docker_container:
+    name: "{{ front_container }}"
+    image: "{{ front_image }}"
+    state: started
+    pull: true
+    restart_policy: always
+    networks:
+      - name: "{{ docker_network_name }}"

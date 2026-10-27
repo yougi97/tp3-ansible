@@ -1,0 +1,13 @@
+- name: Run application
+  community.docker.docker_container:
+    name: "{{ app_container }}"
+    image: "{{ app_image }}"
+    state: started
+    pull: true
+    restart_policy: always
+    networks:
+      - name: "{{ docker_network_name }}"
+    env:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://{{ database_container }}:5432/{{ database_name }}"
+      SPRING_DATASOURCE_USERNAME: "{{ database_user }}"
+      SPRING_DATASOURCE_PASSWORD: "{{ database_password }}"

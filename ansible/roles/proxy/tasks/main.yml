@@ -1,0 +1,11 @@
+- name: Run HTTPD
+  community.docker.docker_container:
+    name: "{{ proxy_container }}"
+    image: "{{ proxy_image }}"
+    state: started
+    pull: true
+    restart_policy: always
+    ports:
+      - "80:80"
+    networks:
+      - name: "{{ docker_network_name }}"

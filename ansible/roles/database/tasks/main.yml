@@ -1,0 +1,13 @@
+- name: Run database
+  community.docker.docker_container:
+    name: "{{ database_container }}"
+    image: "{{ database_image }}"
+    state: started
+    pull: true
+    restart_policy: always
+    networks:
+      - name: "{{ docker_network_name }}"
+    env:
+      POSTGRES_DB: "{{ database_name }}"
+      POSTGRES_USER: "{{ database_user }}"
+      POSTGRES_PASSWORD: "{{ database_password }}"
